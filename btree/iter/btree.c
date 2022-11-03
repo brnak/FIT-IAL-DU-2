@@ -20,6 +20,9 @@
  * možné toto detegovať vo funkcii.
  */
 void bst_init(bst_node_t **tree) {
+
+  
+
 }
 
 /*
@@ -32,6 +35,24 @@ void bst_init(bst_node_t **tree) {
  * Funkciu implementujte iteratívne bez použitia vlastných pomocných funkcií.
  */
 bool bst_search(bst_node_t *tree, char key, int *value) {
+
+  while(tree->right != NULL || tree->left != NULL)
+  {
+    if(tree->key == key)
+    {
+      *value = tree->value;
+      return true;
+    } 
+    else 
+    {
+      if(key > tree->key)
+      {
+        tree = tree->right;
+      } else tree = tree->left;
+    }
+  
+  }
+
   return false;
 }
 
@@ -47,6 +68,7 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
  * Funkciu implementujte iteratívne bez použitia vlastných pomocných funkcií.
  */
 void bst_insert(bst_node_t **tree, char key, int value) {
+  
 }
 
 /*
