@@ -21,7 +21,10 @@
  */
 void bst_init(bst_node_t **tree) {
 
-    *tree = NULL; 
+    
+    //(*tree)->right = NULL; 
+    //(*tree)->left = NULL;
+    *tree = NULL;
 }
 
 /*
@@ -34,25 +37,37 @@ void bst_init(bst_node_t **tree) {
  * Funkciu implementujte iteratívne bez použitia vlastných pomocných funkcií.
  */
 bool bst_search(bst_node_t *tree, char key, int *value) {
+  /*
+  bst_node_t *tmp = tree;
+  printf("xxxxxxxxxxxxxxxxxx\n");
 
-  while(tree->right != NULL || tree->left != NULL)
+   while((tmp->right != NULL) || (tmp->left != NULL))
   {
-    if(tree->key == key)
+  printf("xxxxxxxxxxxxxxxxxx\n");
+
+    if(tmp->key == key)
     {
-      *value = tree->value;
+     // printf("xxxxxxxxxxxxxxxxxx\n");
+      *value = tmp->value;
       return true;
     } 
     else 
     {
-      if(key > tree->key)
+            printf("xxxxxxxxxxxxxxxxxx\n");
+      
+      if(key > tmp->key)
       {
-        tree = tree->right;
-      } else tree = tree->left;
-    }
-  
-  }
+        tmp = tmp->right;
+              printf("xxxxxxxxxxxxxxxxxx\n");
 
+      } else tmp = tmp->left;
+    }
+          printf("xxxxxxxxxxxxxxxxxx\n");
+
+   }
+     */
   return false;
+
 }
 
 /*
@@ -68,6 +83,52 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
  */
 void bst_insert(bst_node_t **tree, char key, int value) {
 
+if(*tree == NULL)
+{
+  bst_node_t *tmp = malloc(sizeof(struct bst_node)); 
+  tmp->key = key;
+  tmp->value = value;
+  tmp->left = NULL;
+  tmp->right = NULL;
+
+  (*tree) = tmp;
+}
+else
+{
+  while((*tree)->key != key && (((*tree)->right != NULL) && ((*tree)->left != NULL)))
+  {
+   if((key < (*tree)->key) && ((*tree)->left != NULL))
+    {
+      (*tree) = (*tree)->left;
+    } 
+    else
+    {
+      if((*tree)->right != NULL )
+      {
+        (*tree) = (*tree)->right;
+      }
+    }
+  }
+
+  if((*tree)->key == key)
+  {
+    (*tree)->value = value;
+  }
+  else
+  {
+    bst_node_t *tmp = malloc(sizeof(struct bst_node)); 
+    tmp->key = key;
+    tmp->value = value;
+    tmp->left = NULL;
+    tmp->right = NULL;
+
+    if(key < (*tree)->key )
+    { 
+      (*tree)->left = tmp;
+    }
+  else (*tree)->right = tmp;
+  }
+  }
 }
 
 /*
