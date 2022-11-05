@@ -37,35 +37,34 @@ void bst_init(bst_node_t **tree) {
  * Funkciu implementujte iteratívne bez použitia vlastných pomocných funkcií.
  */
 bool bst_search(bst_node_t *tree, char key, int *value) {
-  /*
-  bst_node_t *tmp = tree;
-  printf("xxxxxxxxxxxxxxxxxx\n");
 
-   while((tmp->right != NULL) || (tmp->left != NULL))
-  {
-  printf("xxxxxxxxxxxxxxxxxx\n");
+//bst_node_t *findnode = NULL;
+bst_node_t *nextnode = tree;
 
-    if(tmp->key == key)
+while(nextnode != NULL)
+{
+
+  if(key < nextnode->key)
     {
-     // printf("xxxxxxxxxxxxxxxxxx\n");
-      *value = tmp->value;
-      return true;
+      nextnode = nextnode->left;
     } 
-    else 
+  else
     {
-            printf("xxxxxxxxxxxxxxxxxx\n");
-      
-      if(key > tmp->key)
+      if(key > nextnode->key)
       {
-        tmp = tmp->right;
-              printf("xxxxxxxxxxxxxxxxxx\n");
-
-      } else tmp = tmp->left;
-    }
-          printf("xxxxxxxxxxxxxxxxxx\n");
-
-   }
-     */
+        nextnode = nextnode->right; 
+      } else 
+      {
+        if(key == nextnode->key)
+        {
+          *value = nextnode->value;
+         // printf("%d\n", *value);
+          return true;
+        }
+       
+      }
+    } 
+}
   return false;
 
 }
@@ -83,52 +82,73 @@ bool bst_search(bst_node_t *tree, char key, int *value) {
  */
 void bst_insert(bst_node_t **tree, char key, int value) {
 
-if(*tree == NULL)
-{
-  bst_node_t *tmp = malloc(sizeof(struct bst_node)); 
-  tmp->key = key;
-  tmp->value = value;
-  tmp->left = NULL;
-  tmp->right = NULL;
+bst_node_t *insertnode = NULL;
+bst_node_t *nextnode = *tree;
+int node_already_exists = 0;
 
-  (*tree) = tmp;
-}
-else
+while(nextnode != NULL)
 {
-  while((*tree)->key != key && (((*tree)->right != NULL) && ((*tree)->left != NULL)))
-  {
-   if((key < (*tree)->key) && ((*tree)->left != NULL))
+
+  insertnode = nextnode;
+
+
+  if(key < nextnode->key)
     {
-      (*tree) = (*tree)->left;
+      nextnode = nextnode->left;
     } 
-    else
-    {
-      if((*tree)->right != NULL )
-      {
-        (*tree) = (*tree)->right;
-      }
-    }
-  }
-
-  if((*tree)->key == key)
-  {
-    (*tree)->value = value;
-  }
   else
+    {
+      if(key > nextnode->key)
+      {
+        nextnode = nextnode->right; 
+      } else 
+      {
+        node_already_exists = 1;
+        break; 
+      }
+    } 
+}
+
+if(!node_already_exists)
+{
+
+  bst_node_t *tmp = malloc(sizeof(struct bst_node)); 
+  if(tmp == NULL)
   {
-    bst_node_t *tmp = malloc(sizeof(struct bst_node)); 
+    printf("malloc error");
+    return;
+  }  
     tmp->key = key;
     tmp->value = value;
     tmp->left = NULL;
     tmp->right = NULL;
 
-    if(key < (*tree)->key )
-    { 
-      (*tree)->left = tmp;
+
+  if(*tree == NULL)
+  {
+    (*tree) = tmp;
+  }
+  else
+  {
+
+    if(key < insertnode->key)
+    {
+     insertnode->left = tmp; 
+    } 
+    else
+    {
+      if(key > insertnode->key)
+      {
+        insertnode->right = tmp;
+      }   
     }
-  else (*tree)->right = tmp;
   }
-  }
+}
+else
+{
+  insertnode->value = value;
+}
+ 
 }
 
 /*
@@ -145,6 +165,10 @@ else
  * Funkciu implementujte iteratívne bez použitia vlastných pomocných funkcií.
  */
 void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
+
+
+
+
 }
 
 /*
