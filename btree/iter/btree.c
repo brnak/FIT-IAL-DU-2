@@ -166,7 +166,41 @@ else
  */
 void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
 
+bst_node_t *nextnode = *tree;
+bst_node_t *rightmost = NULL;
+bst_node_t *father = NULL;
 
+while(nextnode != NULL)
+{
+
+   rightmost = nextnode;
+
+   nextnode = nextnode->right;
+}
+
+father = *tree; 
+while(father->right != rightmost)
+{
+  father = father->right;
+}
+
+target->key = rightmost->key;
+target->value = rightmost->value;
+
+
+if(rightmost->left != NULL)
+{
+  father->right = rightmost->left;
+}
+
+
+
+
+
+father->right = NULL;
+free(rightmost);
+rightmost = NULL;
+//free(rightmost);
 
 
 }
@@ -184,7 +218,141 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
  * použitia vlastných pomocných funkcií.
  */
 void bst_delete(bst_node_t **tree, char key) {
+
+//printf("XXXXXXXXXX\n");
+
+bst_node_t *nextnode = *tree;
+bst_node_t *foundnode = NULL;
+bst_node_t *father = NULL;
+bool nodeexists = false;
+
+
+while(nextnode != NULL)
+{
+  //printf("XXXXXXXXXX\n");
+  if(nextnode->right != NULL)
+  {
+    if(nextnode->right->key == key)
+    {
+      father = nextnode;
+    }
+  }
+  
+  if(nextnode->left != NULL)
+  {
+    if(nextnode->left->key == key)
+    {
+      father = nextnode;
+    }
+  }
+
+
+  foundnode = nextnode;
+
+  if(key < nextnode->key)
+    {
+      nextnode = nextnode->left;
+    } 
+  else
+    {
+      if(key > nextnode->key)
+      {
+        nextnode = nextnode->right; 
+      } 
+      else 
+      {
+        if(key == nextnode->key)
+        {
+          nodeexists = true;
+          break;
+        }
+       
+      }
+    } 
 }
+
+//printf("XXXXXXXXXX\n");
+  
+  if(nodeexists)
+  {
+
+    if(((foundnode->left != NULL) && (foundnode->right ==NULL)) || ((foundnode->left == NULL) && (foundnode->right != NULL)))
+    {
+//printf("XXXXXXXXXX\n");
+
+      if(foundnode->key < father->key)
+      {
+        if(foundnode->left != NULL)
+        {
+          father->left = foundnode->left;
+        } 
+        else
+        {
+          if(foundnode->right != NULL)
+          {
+            father->left = foundnode->right;
+          }
+        }
+      }
+      else
+      {
+        if(foundnode->key > father->key)
+        {
+          if(foundnode->left != NULL)
+          {
+            father->right = foundnode->left;
+          }
+          else
+          if(foundnode->right != NULL)
+          {
+            father->right = foundnode->right;
+          }
+        }
+       }
+         free(foundnode);
+         foundnode = NULL; 
+
+      }
+      else
+      {
+
+        if((foundnode->left == NULL) && (foundnode->right == NULL))
+        {
+
+          if(key > father->key)
+          {
+            father->right = NULL;
+          } else
+          {
+            if(key < father->key)
+            {
+              father->left = NULL; 
+            }
+          }
+
+          free(foundnode); 
+          foundnode = NULL;
+        }
+        else
+        {
+          if((foundnode->left != NULL) && (foundnode->right != NULL))
+          {
+           // bst_node_t *tmp = foundnode;
+             bst_replace_by_rightmost(foundnode, &foundnode->left);
+
+          }
+        }    
+      } 
+    }
+  }
+
+
+
+
+
+
+
+
 
 /*
  * Zrušenie celého stromu.
@@ -197,6 +365,19 @@ void bst_delete(bst_node_t **tree, char key) {
  * vlastných pomocných funkcií.
  */
 void bst_dispose(bst_node_t **tree) {
+
+ /* bst_node_t *deletenode = NULL;
+
+  while(*tree != NULL)
+  {
+
+    while()
+
+
+
+  }*/
+
+
 }
 
 /*
