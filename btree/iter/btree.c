@@ -409,6 +409,15 @@ while((*tree != NULL) || (stack_bst_empty(&dstack) != true))
  * vlastných pomocných funkcií.
  */
 void bst_leftmost_preorder(bst_node_t *tree, stack_bst_t *to_visit) {
+  
+  while(tree != NULL)
+  {
+    stack_bst_push(to_visit, tree);
+    bst_print_node(tree);
+    tree = tree->left;
+  }
+
+
 }
 
 /*
@@ -420,6 +429,17 @@ void bst_leftmost_preorder(bst_node_t *tree, stack_bst_t *to_visit) {
  * zásobníku uzlov bez použitia vlastných pomocných funkcií.
  */
 void bst_preorder(bst_node_t *tree) {
+
+  stack_bst_t pstack;
+  stack_bst_init(&pstack);
+  bst_leftmost_preorder(tree,&pstack);
+  while(stack_bst_empty(&pstack) != 1)
+  {
+    tree = stack_bst_pop(&pstack);
+    bst_leftmost_preorder(tree->right,&pstack);
+  }
+
+
 }
 
 /*
@@ -432,6 +452,13 @@ void bst_preorder(bst_node_t *tree) {
  * vlastných pomocných funkcií.
  */
 void bst_leftmost_inorder(bst_node_t *tree, stack_bst_t *to_visit) {
+ 
+ while(tree != NULL)
+  {
+    stack_bst_push(to_visit, tree);
+    tree = tree->left;
+  }
+
 }
 
 /*
@@ -443,6 +470,20 @@ void bst_leftmost_inorder(bst_node_t *tree, stack_bst_t *to_visit) {
  * zásobníku uzlov bez použitia vlastných pomocných funkcií.
  */
 void bst_inorder(bst_node_t *tree) {
+
+
+stack_bst_t istack;
+stack_bst_init(&istack);
+
+bst_leftmost_inorder(tree,&istack);
+while(stack_bst_empty(&istack) != true)
+{
+  tree = stack_bst_pop(&istack);
+  bst_print_node(tree);
+  bst_leftmost_inorder(tree->right, &istack);
+}
+
+
 }
 
 /*
@@ -457,6 +498,15 @@ void bst_inorder(bst_node_t *tree) {
  */
 void bst_leftmost_postorder(bst_node_t *tree, stack_bst_t *to_visit,
                             stack_bool_t *first_visit) {
+
+while(tree != NULL)
+{
+  stack_bst_push(to_visit, tree);
+  stack_bool_push(first_visit, true);
+  tree = tree->left;
+}
+
+
 }
 
 /*
@@ -468,4 +518,31 @@ void bst_leftmost_postorder(bst_node_t *tree, stack_bst_t *to_visit,
  * zásobníkov uzlov a bool hodnôt bez použitia vlastných pomocných funkcií.
  */
 void bst_postorder(bst_node_t *tree) {
+
+stack_bst_t postack;
+stack_bst_init(&postack);
+stack_bool_t bpostack;
+stack_bool_init(&bpostack);
+
+bst_leftmost_postorder(tree, &postack, &bpostack);
+while(stack_bst_empty(&postack) != true)
+{
+  tree = stack_bst_pop(&postack);
+  stack_bst_push(&postack, tree);
+
+  if(stack_bool_pop(&bpostack) == true)
+  {
+    
+    stack_bool_push(&bpostack, false);
+    bst_leftmost_postorder(tree->right,&postack,&bpostack);
+  }
+  else
+  {
+
+    stack_bst_pop(&postack);
+    bst_print_node(tree);
+  }
+
+}
+
 }
