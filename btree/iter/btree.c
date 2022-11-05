@@ -366,18 +366,37 @@ while(nextnode != NULL)
  */
 void bst_dispose(bst_node_t **tree) {
 
- /* bst_node_t *deletenode = NULL;
+stack_bst_t dstack;
+stack_bst_init(&dstack);
 
-  while(*tree != NULL)
+bst_node_t *deletenode = NULL;
+
+if(*tree != NULL)
+{
+
+while((*tree != NULL) || (stack_bst_empty(&dstack) != true))
+{
+
+  if(*tree == NULL)
   {
+    *tree = stack_bst_pop(&dstack);
+  }
 
-    while()
+  if((*tree)->right != NULL)
+  {
+    stack_bst_push(&dstack,(*tree)->right);
+  }
+  
+      deletenode = *tree;
+      *tree = (*tree)->left;
+      free(deletenode);
+      deletenode = NULL;
+
+}
 
 
 
-  }*/
-
-
+}
 }
 
 /*
