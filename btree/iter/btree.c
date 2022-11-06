@@ -273,7 +273,7 @@ while(nextnode != NULL)
 
 //printf("XXXXXXXXXX\n");
   
-  if(nodeexists)
+  if(nodeexists == true)
   {
 
     if(((foundnode->left != NULL) && (foundnode->right ==NULL)) || ((foundnode->left == NULL) && (foundnode->right != NULL)))
