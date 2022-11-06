@@ -140,61 +140,65 @@ float *ht_get(ht_table_t *table, char *key) {
  * Pri implementácii NEVYUŽÍVAJTE funkciu ht_search.
  */
 void ht_delete(ht_table_t *table, char *key) {
- /*   printf("XXXXXXX");
-
-
   int index = get_hash(key);
 
   ht_item_t *tmp = (*table)[index];
   ht_item_t *tmpprev = tmp; 
+
   
   if (tmp == NULL) return;
 
-  while( (tmp->key != key) || tmp != NULL )
+  while( (tmp->key != key) && tmp != NULL )
   {
 
     tmp = tmp->next;  
   }
-  printf("XXXXXXX");
-  if(tmpprev->next != NULL)
+  
+  if(tmp->key != key) return;
+  
+  
+  while(tmpprev->next != tmp && tmpprev->next != NULL)
   {
-    while(tmpprev->next->key != key || tmpprev->next != NULL )
-    {
-      tmpprev = tmpprev->next;
-    }
+    tmpprev = tmpprev->next;
   }
 
-  if(tmpprev == tmp)
+  if((tmp = tmpprev) && (tmp->next != NULL))
+  {
+    (*table)[index] = tmp->next;
+    free(tmp);
+    tmp = NULL;
+    tmpprev = NULL;
+    return;
+  } 
+
+  if((tmp = tmpprev) && (tmp->next == NULL))
+  {
+    free(tmp);
+    tmp = NULL;
+    (*table)[index] = NULL; 
+    return;
+  }
+
+  if((tmp != tmpprev))
   {
     if(tmp->next != NULL)
     {
-      (*table)[index] = tmp->next;
-      free(tmp);
-      tmp = NULL;
-      return;
-    } else 
+      tmpprev->next = tmp->next;
+    }
+    else
     {
-      free(tmp);
-      tmp = NULL;
-      return;
+      tmpprev->next = NULL;
     }
 
+    free(tmp);
+    tmp = NULL;
+    return;
 
-  }  
-  else
-  {
-    if(tmpprev != NULL)
-    {
-      tmpprev->next = tmp->next;
-      free(tmp);
-      tmp = NULL;
-      return;
-
-    } 
   }
+
   
 
-*/
+
 
 }
 
