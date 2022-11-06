@@ -11,6 +11,7 @@
 #include "hashtable.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 int HT_SIZE = MAX_HT_SIZE;
 
@@ -103,7 +104,6 @@ else
   {
     (*table)[newindex] = tmp;
   }
-   
 
 }
 
@@ -118,7 +118,17 @@ else
  * Pri implementácii využite funkciu ht_search.
  */
 float *ht_get(ht_table_t *table, char *key) {
+
+  ht_item_t *tmp = ht_search(table, key);
+  if(tmp != NULL)
+  {
+    float *valuepointer = &tmp->value;
+    return valuepointer;
+  }else
+  { 
   return NULL;
+  }
+
 }
 
 /*
@@ -130,6 +140,62 @@ float *ht_get(ht_table_t *table, char *key) {
  * Pri implementácii NEVYUŽÍVAJTE funkciu ht_search.
  */
 void ht_delete(ht_table_t *table, char *key) {
+ /*   printf("XXXXXXX");
+
+
+  int index = get_hash(key);
+
+  ht_item_t *tmp = (*table)[index];
+  ht_item_t *tmpprev = tmp; 
+  
+  if (tmp == NULL) return;
+
+  while( (tmp->key != key) || tmp != NULL )
+  {
+
+    tmp = tmp->next;  
+  }
+  printf("XXXXXXX");
+  if(tmpprev->next != NULL)
+  {
+    while(tmpprev->next->key != key || tmpprev->next != NULL )
+    {
+      tmpprev = tmpprev->next;
+    }
+  }
+
+  if(tmpprev == tmp)
+  {
+    if(tmp->next != NULL)
+    {
+      (*table)[index] = tmp->next;
+      free(tmp);
+      tmp = NULL;
+      return;
+    } else 
+    {
+      free(tmp);
+      tmp = NULL;
+      return;
+    }
+
+
+  }  
+  else
+  {
+    if(tmpprev != NULL)
+    {
+      tmpprev->next = tmp->next;
+      free(tmp);
+      tmp = NULL;
+      return;
+
+    } 
+  }
+  
+
+*/
+
 }
 
 /*
