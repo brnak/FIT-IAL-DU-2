@@ -179,11 +179,13 @@ while(nextnode != NULL)
 }
 
 father = *tree; 
-while(father->right != rightmost)
+if(father->right != NULL)
 {
-  father = father->right;
+  while((father->right != rightmost))
+  {
+    father = father->right;
+  }
 }
-
 target->key = rightmost->key;
 target->value = rightmost->value;
 
