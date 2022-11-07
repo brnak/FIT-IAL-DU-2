@@ -51,17 +51,17 @@ ht_item_t *ht_search(ht_table_t *table, char *key) {
   int index = get_hash(key);
   ht_item_t *tmp = (*table)[index];
 
-  if(tmp == NULL)
-  { 
-    return(NULL);
-  } 
 
-  while(tmp->key != key && tmp->next != NULL)
+  while(tmp != NULL)
   {
+    if(strcmp(tmp->key, key) == 0)
+    {
+      return tmp;
+    }
     tmp = tmp->next;
   }
   
-  return((tmp->key == key) ? tmp : NULL);
+  return NULL;
   
 }
 
@@ -76,7 +76,7 @@ ht_item_t *ht_search(ht_table_t *table, char *key) {
 void ht_insert(ht_table_t *table, char *key, float value) {
 
 ht_item_t *tmp = ht_search(table,key);
-
+//int index = get_hash(key);
 
 
 
@@ -95,7 +95,17 @@ else
 
   tmp->key = key;
   tmp->value = value;
-  if( (*table)[newindex] != NULL)
+  tmp->next = (*table)[newindex];
+
+  (*table)[newindex] = tmp;
+
+}
+
+ 
+ 
+ 
+ 
+ /* if( (*table)[newindex] != NULL)
   {
     tmp->next = (*table)[newindex];
     (*table)[newindex] = tmp;
@@ -105,7 +115,7 @@ else
     (*table)[newindex] = tmp;
   }
 
-}
+}*/
 
 }
 
@@ -117,7 +127,7 @@ else
  *
  * Pri implementácii využite funkciu ht_search.
  */
-float *ht_get(ht_table_t *table, char *key) {
+float *ht_get(ht_table_t *table, char *key) {  
 
   ht_item_t *tmp = ht_search(table, key);
   if(tmp != NULL)
@@ -143,64 +153,48 @@ void ht_delete(ht_table_t *table, char *key) {
   int index = get_hash(key);
 
   ht_item_t *tmp = (*table)[index];
-  ht_item_t *tmpprev = tmp; 
+  ht_item_t *tmpprev; 
+  //ht_item_t *del; 
+  
 
   
   if (tmp == NULL) return;
 
-  while( (tmp->key != key) && tmp != NULL )
-  {
-
-    tmp = tmp->next;  
-  }
-  
-  if(tmp->key != key) return;
-  
-  
-  while(tmpprev->next != tmp && tmpprev->next != NULL)
-  {
-    tmpprev = tmpprev->next;
-  }
-
-  if((tmp = tmpprev) && (tmp->next != NULL))
+  if(strcmp(tmp->key, key) == 0)
   {
     (*table)[index] = tmp->next;
     free(tmp);
-    tmp = NULL;
-    tmpprev = NULL;
-    return;
   } 
-
-  if((tmp = tmpprev) && (tmp->next == NULL))
-  {
-    free(tmp);
-    tmp = NULL;
-    (*table)[index] = NULL; 
-    return;
-  }
-
-  if((tmp != tmpprev))
+  else
   {
     if(tmp->next != NULL)
     {
-      tmpprev->next = tmp->next;
-    }
-    else
-    {
-      tmpprev->next = NULL;
-    }
 
-    free(tmp);
-    tmp = NULL;
-    return;
+      tmpprev = tmp;
+      //del = tmp->next;
+
+      tmp = tmp->next;
+      
+      while(tmp != NULL)
+      {
+       
+        if(strcmp(tmp->key, key) == 0)
+        {
+          tmpprev->next = tmp->next;
+         // del = tmp->next;
+          free(tmp);
+        }
+        
+        tmpprev = tmp;
+        tmp = tmp->next;
+
+      }
+    }
+  }
 
   }
 
   
-
-
-
-}
 
 /*
  * Zmazanie všetkých prvkov z tabuľky.
@@ -209,4 +203,27 @@ void ht_delete(ht_table_t *table, char *key) {
  * inicializácii.
  */
 void ht_delete_all(ht_table_t *table) {
+
+ht_item_t *tmp;
+ht_item_t *del;
+
+for(int i = 0; i < HT_SIZE; i++)
+{
+  tmp = (*table)[i];
+ 
+(*table)[i] = NULL;
+
+  while(tmp != NULL)
+  {
+   
+    del = tmp->next;
+    free(tmp);
+    tmp = del;
+    
+  } 
+    
+   //(*table)[i] = NULL;
+}
+
+
 }
